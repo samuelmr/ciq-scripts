@@ -17,27 +17,28 @@ BETA_UUID=`uuidgen`
 mkdir $PROJECT
 mkdir $PROJECT/releases
 mkdir $PROJECT/resources
-echo """
+cat << EOS > $PROJECT/resources/strings.xml
 <resources>
-  <string id=\"AppName\">$PROJECT</string>
+  <string id="AppName">$PROJECT</string>
 </resources>
-""" > $PROJECT/resources/strings.xml
+EOS
+
 
 mkdir $PROJECT/resources/images
 cp ~/connectiq/samples/Analog/resources/images/icon.png $PROJECT/resources/images/
 
-echo """
+cat << EOR > $PROJECT/resources/bitmaps.xml
 <resources>
-    <bitmap id=\"LauncherIcon\" filename=\"images/icon.png\" />
+    <bitmap id="LauncherIcon" filename="images/icon.png" />
 </resources>
-""" > $PROJECT/resources/bitmaps.xml
+EOR
 
 mkdir $PROJECT/source
 
 if [ "$TYPE" = "face" ]
 then
 	MANIFEST_TYPE="watchface"
-  echo """
+  cat << EOA > $PROJECT/source/${PROJECT}App.mc
 using Toybox.Application;
 
 class ${PROJECT}App extends Application.AppBase {
@@ -59,9 +60,9 @@ class ${PROJECT}App extends Application.AppBase {
         }
     }
 }
-""" > $PROJECT/source/${PROJECT}App.mc
+EOA
 
-  echo """
+  cat << EOV > $PROJECT/source/${PROJECT}View.mc
 using Toybox.WatchUi;
 
 class ${PROJECT}View extends WatchUi.WatchFace {
@@ -73,21 +74,21 @@ class ${PROJECT}View extends WatchUi.WatchFace {
     function onLayout(dc) {
     }
 }
-""" > $PROJECT/source/${PROJECT}View.mc
+EOV
 
-  echo """
+  cat << EOD > $PROJECT/source/${PROJECT}Delegate.mc
 using Toybox.WatchUi;
 
 class ${PROJECT}Delegate extends WatchUi.WatchFaceDelegate {
     function onPowerBudgetExceeded(powerInfo) {
-        System.println(\"Average execution time: \" + powerInfo.executionTimeAverage);
-        System.println(\"Allowed execution time: \" + powerInfo.executionTimeLimit);
+        System.println("Average execution time: " + powerInfo.executionTimeAverage);
+        System.println("Allowed execution time: " + powerInfo.executionTimeLimit);
     }
 }
-""" > $PROJECT/source/${PROJECT}Delegate.mc
+EOD
 else
 	MANIFEST_TYPE="watch-app"
-  echo """
+  cat << EOAA > $PROJECT/source/${PROJECT}App.mc
 using Toybox.Application;
 
 class ${PROJECT}App extends Application.AppBase {
@@ -105,9 +106,9 @@ class ${PROJECT}App extends Application.AppBase {
         return [new ${PROJECT}View(), new ${PROJECT}Delegate()];
     }
 }
-""" > $PROJECT/source/${PROJECT}App.mc
+EOAA
 
-echo """
+cat << EOAV > $PROJECT/source/${PROJECT}View.mc
 using Toybox.WatchUi;
 
 class ${PROJECT}View extends WatchUi.View {
@@ -119,10 +120,9 @@ class ${PROJECT}View extends WatchUi.View {
     }
 
 }
+EOAV
 
-""" > $PROJECT/source/${PROJECT}View.mc
-
-echo """
+cat << EOAD > $PROJECT/source/${PROJECT}Delegate.mc
 using Toybox.WatchUi;
 
 class ${PROJECT}Delegate extends WatchUi.BehaviorDelegate {
@@ -155,141 +155,43 @@ class ${PROJECT}Delegate extends WatchUi.BehaviorDelegate {
     function onBack() {
     }
 }
-""" > $PROJECT/source/${PROJECT}Delegate.mc
+EOAD
 fi
 
-echo """
-<iq:manifest xmlns:iq=\"http://www.garmin.com/xml/connectiq\" version=\"1\">
-    <iq:application entry=\"${PROJECT}App\" id=\"$UUID\" launcherIcon=\"@Drawables.LauncherIcon\" minSdkVersion=\"1.2.0\" name=\"@Strings.AppName\" type=\"${MANIFEST_TYPE}\">
-        <iq:products>
-            <iq:product id=\"approachs60\"/>
-            <iq:product id=\"d2bravo\"/>
-            <iq:product id=\"d2bravo_titanium\"/>
-            <iq:product id=\"d2charlie\"/>
-            <iq:product id=\"d2delta\"/>
-            <iq:product id=\"d2deltapx\"/>
-            <iq:product id=\"d2deltas\"/>
-            <iq:product id=\"descentmk1\"/>
-            <iq:product id=\"epix\"/>
-            <iq:product id=\"fenix3\"/>
-            <iq:product id=\"fenix3_hr\"/>
-            <iq:product id=\"fenix5\"/>
-            <iq:product id=\"fenix5plus\"/>
-            <iq:product id=\"fenix5s\"/>
-            <iq:product id=\"fenix5splus\"/>
-            <iq:product id=\"fenix5x\"/>
-            <iq:product id=\"fenix5xplus\"/>
-            <iq:product id=\"fenix6\"/>
-            <iq:product id=\"fenix6pro\"/>
-            <iq:product id=\"fenix6s\"/>
-            <iq:product id=\"fenix6spro\"/>
-            <iq:product id=\"fenix6xpro\"/>
-            <iq:product id=\"fenixchronos\"/>
-            <iq:product id=\"fr230\"/>
-            <iq:product id=\"fr235\"/>
-            <iq:product id=\"fr245\"/>
-            <iq:product id=\"fr245m\"/>
-            <iq:product id=\"fr45\"/>
-            <iq:product id=\"fr630\"/>
-            <iq:product id=\"fr645\"/>
-            <iq:product id=\"fr645m\"/>
-            <iq:product id=\"fr735xt\"/>
-            <iq:product id=\"fr920xt\"/>
-            <iq:product id=\"fr935\"/>
-            <iq:product id=\"fr945\"/>
-            <iq:product id=\"legacyherocaptainmarvel\"/>
-            <iq:product id=\"legacyherofirstavenger\"/>
-            <iq:product id=\"marqathlete\"/>
-            <iq:product id=\"marqaviator\"/>
-            <iq:product id=\"marqcaptain\"/>
-            <iq:product id=\"marqdriver\"/>
-            <iq:product id=\"marqexpedition\"/>
-            <iq:product id=\"venu\"/>
-            <iq:product id=\"vivoactive\"/>
-            <iq:product id=\"vivoactive3\"/>
-            <iq:product id=\"vivoactive3d\"/>
-            <iq:product id=\"vivoactive3m\"/>
-            <iq:product id=\"vivoactive3mlte\"/>
-            <iq:product id=\"vivoactive4\"/>
-            <iq:product id=\"vivoactive4s\"/>
-            <iq:product id=\"vivoactive_hr\"/>
-            <iq:product id=\"vivolife\"/>
-        </iq:products>
+PRODUCTS="        <iq:products>\n"
+TARGETS=($(ls -1 "${CIQ_HOME}../../devices"))
+for TARGET in "${TARGETS[@]}"
+do
+  PRODUCTS+="            <iq:product id=\"${TARGET}\"/>\n"
+done
+PRODUCTS+="        </iq:products>\n"
+
+cat << EOM > $PROJECT/manifest.xml
+<iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="1">
+    <iq:application entry="${PROJECT}App" id="$UUID" launcherIcon="@Drawables.LauncherIcon" minSdkVersion="1.2.0" name="@Strings.AppName" type="${MANIFEST_TYPE}">
+${PRODUCTS}
         <iq:languages>
             <iq:language>eng</iq:language>
         </iq:languages>
     </iq:application>
 </iq:manifest>
-""" > $PROJECT/manifest.xml
+EOM
 
-echo """
+cat << EOBM > $PROJECT/manifest-beta.xml
 <iq:manifest xmlns:iq=\"http://www.garmin.com/xml/connectiq\" version=\"1\">
     <iq:application entry=\"${PROJECT}App\" id=\"${BETA_UUID}\" launcherIcon=\"@Drawables.LauncherIcon\" minSdkVersion=\"1.2.0\" name=\"@Strings.AppName\" type=\"watch-${TYPE}\">
-        <iq:products>
-            <iq:product id=\"approachs60\"/>
-            <iq:product id=\"d2bravo\"/>
-            <iq:product id=\"d2bravo_titanium\"/>
-            <iq:product id=\"d2charlie\"/>
-            <iq:product id=\"d2delta\"/>
-            <iq:product id=\"d2deltapx\"/>
-            <iq:product id=\"d2deltas\"/>
-            <iq:product id=\"descentmk1\"/>
-            <iq:product id=\"epix\"/>
-            <iq:product id=\"fenix3\"/>
-            <iq:product id=\"fenix3_hr\"/>
-            <iq:product id=\"fenix5\"/>
-            <iq:product id=\"fenix5plus\"/>
-            <iq:product id=\"fenix5s\"/>
-            <iq:product id=\"fenix5splus\"/>
-            <iq:product id=\"fenix5x\"/>
-            <iq:product id=\"fenix5xplus\"/>
-            <iq:product id=\"fenix6\"/>
-            <iq:product id=\"fenix6pro\"/>
-            <iq:product id=\"fenix6s\"/>
-            <iq:product id=\"fenix6spro\"/>
-            <iq:product id=\"fenix6xpro\"/>
-            <iq:product id=\"fenixchronos\"/>
-            <iq:product id=\"fr230\"/>
-            <iq:product id=\"fr235\"/>
-            <iq:product id=\"fr245\"/>
-            <iq:product id=\"fr245m\"/>
-            <iq:product id=\"fr45\"/>
-            <iq:product id=\"fr630\"/>
-            <iq:product id=\"fr645\"/>
-            <iq:product id=\"fr645m\"/>
-            <iq:product id=\"fr735xt\"/>
-            <iq:product id=\"fr920xt\"/>
-            <iq:product id=\"fr935\"/>
-            <iq:product id=\"fr945\"/>
-            <iq:product id=\"legacyherocaptainmarvel\"/>
-            <iq:product id=\"legacyherofirstavenger\"/>
-            <iq:product id=\"marqathlete\"/>
-            <iq:product id=\"marqaviator\"/>
-            <iq:product id=\"marqcaptain\"/>
-            <iq:product id=\"marqdriver\"/>
-            <iq:product id=\"marqexpedition\"/>
-            <iq:product id=\"venu\"/>
-            <iq:product id=\"vivoactive\"/>
-            <iq:product id=\"vivoactive3\"/>
-            <iq:product id=\"vivoactive3d\"/>
-            <iq:product id=\"vivoactive3m\"/>
-            <iq:product id=\"vivoactive3mlte\"/>
-            <iq:product id=\"vivoactive4\"/>
-            <iq:product id=\"vivoactive4s\"/>
-            <iq:product id=\"vivoactive_hr\"/>
-            <iq:product id=\"vivolife\"/>
-        </iq:products>
+${PRODUCTS}
         <iq:languages>
             <iq:language>eng</iq:language>
         </iq:languages>
     </iq:application>
 </iq:manifest>
-""" > $PROJECT/manifest-beta.xml
+EOBM
 
-echo """
+cat << EOJ > $PROJECT/monkey.jungle
 project.manifest = manifest.xml
-""" > $PROJECT/monkey.jungle
+EOJ
 
-echo """
+cat << EOBJ > $PROJECT/beta.jungle
 project.manifest = manifest-beta.xml
-""" > $PROJECT/beta.jungle
+EOBJ
