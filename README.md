@@ -24,6 +24,7 @@ iqinit -t face MyAwesomeWatchFace
 
 Run current project in the default (fenix5plus) simulator
 ```sh
+cd MyAwesomeApp
 mc && md
 ```
 
