@@ -158,13 +158,13 @@ class ${PROJECT}Delegate extends WatchUi.BehaviorDelegate {
 EOAD
 fi
 
-PRODUCTS="        <iq:products>\n"
+PRODUCTS="        <iq:products>"$'\n'
 TARGETS=($(ls -1 "${CIQ_HOME}../../devices"))
 for TARGET in "${TARGETS[@]}"
 do
-  PRODUCTS+="            <iq:product id=\"${TARGET}\"/>\n"
+  PRODUCTS+="            <iq:product id=\"${TARGET}\"/>"$'\n'
 done
-PRODUCTS+="        </iq:products>\n"
+PRODUCTS+="        </iq:products>"
 
 cat << EOM > $PROJECT/manifest.xml
 <iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="1">
