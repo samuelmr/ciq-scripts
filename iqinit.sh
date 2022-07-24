@@ -167,8 +167,9 @@ done
 PRODUCTS+="        </iq:products>"
 
 cat << EOM > $PROJECT/manifest.xml
-<iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="1">
-    <iq:application entry="${PROJECT}App" id="$UUID" launcherIcon="@Drawables.LauncherIcon" minSdkVersion="1.2.0" name="@Strings.AppName" type="${MANIFEST_TYPE}">
+<?xml version="1.0"?>
+<iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="3">
+    <iq:application entry="${PROJECT}App" id="$UUID" launcherIcon="@Drawables.LauncherIcon" minApiLevel="1.2.0" name="@Strings.AppName" type="${MANIFEST_TYPE}">
 ${PRODUCTS}
         <iq:languages>
             <iq:language>eng</iq:language>
@@ -178,8 +179,9 @@ ${PRODUCTS}
 EOM
 
 cat << EOBM > $PROJECT/manifest-beta.xml
-<iq:manifest xmlns:iq=\"http://www.garmin.com/xml/connectiq\" version=\"1\">
-    <iq:application entry=\"${PROJECT}App\" id=\"${BETA_UUID}\" launcherIcon=\"@Drawables.LauncherIcon\" minSdkVersion=\"1.2.0\" name=\"@Strings.AppName\" type=\"watch-${TYPE}\">
+<?xml version="1.0"?>
+<iq:manifest xmlns:iq="http://www.garmin.com/xml/connectiq" version="3">
+    <iq:application entry="${PROJECT}App" id="${BETA_UUID}" launcherIcon="@Drawables.LauncherIcon" minApiLevel="1.2.0" name="@Strings.AppName" type="watch-${TYPE}">
 ${PRODUCTS}
         <iq:languages>
             <iq:language>eng</iq:language>
